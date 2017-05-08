@@ -22,7 +22,7 @@ public class FormServiceTest {
 	private FormService formService;
 	@Test
 	public void find(){
-		List<Form> list = this.formService.find(1, 10);
+		List<Form> list = this.formService.query(1, 10);
 		PageInfo<Form> pageInfo = new PageInfo<Form>(list);
 		for (Form form : list) {
 			System.out.println(form.getFormName());
@@ -38,7 +38,7 @@ public class FormServiceTest {
 		form.setFormId(formId);
 		form.setFormName("测试表单2");
 		form.setFormHtml("helloXJL HTML");
-		this.formService.insert(form);
+		this.formService.add(form);
 	}
 	@Test
 	public void delete(){

@@ -55,11 +55,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.xjl</groupId>
-			<artifactId>xjl-sql-processor</artifactId>
-			<version>0.0.2</version>
-		</dependency>
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
@@ -70,6 +65,11 @@
 		    <artifactId>postgresql</artifactId>
 		    <version>9.3-1102.jdbc41</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>com.xjl.pt</groupId>
+			<artifactId>xjl_pt_core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -17,7 +17,7 @@ public interface FormMapper {
 	@Select("select form_id as formId, form_name as formName,form_desc as formDesc,form_html as formHtml "
 			+ ",before_show_script as beforeShowScript,before_submit_script as beforeSubmitScript "
 			+ "from xjl_pt_form")
-	public List<Form> all();
+	public List<Form> select();
 	@Delete("delete from xjl_pt_form where form_id=#{formId}")
 	public void delete(String formId);
 }

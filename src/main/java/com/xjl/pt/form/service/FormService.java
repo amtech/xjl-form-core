@@ -25,15 +25,15 @@ public class FormService {
 	 * @param pageSize
 	 * @return
 	 */
-	public List<Form> find(int page, int pageSize){
+	public List<Form> query(int page, int pageSize){
 		PageHelper.startPage(page, pageSize);
-		return this.formMapper.all();
+		return this.formMapper.select();
 	}
 	/**
 	 * 新增加一个form
 	 * @param form
 	 */
-	public void insert(Form form){
+	public void add(Form form){
 		if (StringUtils.isBlank(form.getFormId())){
 			form.setFormId(UUID.randomUUID().toString());
 		}
