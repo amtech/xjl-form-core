@@ -50,6 +50,10 @@ public class TableFieldService extends XJLService {
 		return this.tableFieldMapper.selectByTableId(tableId);
 	}
 	public void initFieldType$name(TableField field){
+		if (StringUtils.isEmpty(field.getFieldType())){
+			field.setFieldType$name("空");
+			return;
+		}
 		switch (field.getFieldType()){
 		case "10":
 			field.setFieldType$name("字符");
