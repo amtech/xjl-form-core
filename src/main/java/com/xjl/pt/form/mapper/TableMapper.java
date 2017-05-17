@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 /**
  * 表
@@ -28,5 +29,7 @@ public interface TableMapper {
 			+ ","+XJLMapper.FIX_SELECT_FIELD
 			+ " from " + TABLE_NAME + " where table_id=#{tableId}")
 	public Table selectById(String tableId);
+	@Update("update " + TABLE_NAME + " set "+ XJLMapper.FIX_DELETE_FIELD + " where table_id=#{tableId}")
+	public void delete(XJLDomain table);
 
 }

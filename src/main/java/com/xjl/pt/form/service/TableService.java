@@ -29,7 +29,7 @@ public class TableService extends XJLService{
 	}
 	@Override
 	public void _delete(XJLDomain domain) {
-		throw new RuntimeException("该方法还未实现");
+		this.tableMapper.delete(domain);
 	}
 	@Override
 	public void _resetNewId(XJLDomain domain) {
