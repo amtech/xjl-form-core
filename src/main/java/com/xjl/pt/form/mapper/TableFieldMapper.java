@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import com.xjl.pt.core.domain.XJLDomain;
@@ -33,4 +34,10 @@ public interface TableFieldMapper {
 	public List<TableField> selectByTableId(String tableId);
 	@Select("select count(*) from " + TABLE_NAME + " where table_id=#{tableId} and state='A'")
 	public int selectCountByTableId(String tableId);
+	@Update("update " + TABLE_NAME + " set " + XJLMapper.FIX_DELETE_FIELD + " where field_id=#{fieldId}")
+	public void delete(XJLDomain field);
+	@Update("update " + TABLE_NAME + " set field_name=#{fieldName},field_desc=#{fieldDesc},"
+			+ "field_type=#{fieldType},field_length=#{fieldLength},pk=#{pk},dict_id=#{dictId},"
+			+ "foreign_table_id=#{foreignTableId} where field_id=#{fieldId}")
+	public void update(XJLDomain field);
 }

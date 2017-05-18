@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.xjl.pt.core.domain.Dict;
+import com.xjl.pt.core.domain.User;
 import com.xjl.pt.core.domain.XJLDomain;
 import com.xjl.pt.core.service.DictService;
 import com.xjl.pt.core.service.XJLService;
@@ -35,9 +36,12 @@ public class TableFieldService extends XJLService {
 
 	@Override
 	public void _delete(XJLDomain domain) {
-		throw new RuntimeException("该方法还未实现");
+		this.tableFieldMapper.delete(domain);
 	}
-
+	@Override
+	public void modify(XJLDomain domain, User user) {
+		this.tableFieldMapper.update(domain);
+	}
 	@Override
 	public void _resetNewId(XJLDomain domain) {
 		((TableField)domain).setFieldId(UUID.randomUUID().toString());

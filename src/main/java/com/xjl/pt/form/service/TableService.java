@@ -32,6 +32,10 @@ public class TableService extends XJLService{
 		this.tableMapper.delete(domain);
 	}
 	@Override
+	public void modify(XJLDomain domain, User user) {
+		this.tableMapper.update(domain);
+	}
+	@Override
 	public void _resetNewId(XJLDomain domain) {
 		((Table)domain).setTableId(UUID.randomUUID().toString());
 	}
