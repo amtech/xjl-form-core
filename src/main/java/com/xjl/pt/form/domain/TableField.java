@@ -19,8 +19,6 @@ public class TableField extends XJLDomain {
 	private String fieldType;
 	//字段长度
 	private Integer fieldLength;
-	//是不是主键，一个表只能有一个主键
-	private String pk;
 	//字典id
 	private String dictId;
 	//表id
@@ -35,7 +33,18 @@ public class TableField extends XJLDomain {
 	private String fieldType$name;
 	//对应字典dictId的名称，不是数据库字段
 	private String dictId$name;
-	
+	//字符串
+	public static final String FIELD_TYPE_STRING = "10";
+	//数字
+	public static final String FIELD_TYPE_NUMBER = "20";
+	//日期
+	public static final String FIELD_TYPE_DATE = "30";
+	//字典
+	public static final String FIELD_TYPE_DICT = "40";
+	//外键
+	public static final String FIELD_TYPE_FK = "50";
+	//主键
+	public static final String FIELD_TYPE_PK = "60";
 	public String getFieldId() {
 		return fieldId;
 	}
@@ -65,15 +74,6 @@ public class TableField extends XJLDomain {
 	}
 	public void setFieldLength(Integer fieldLength) {
 		this.fieldLength = fieldLength;
-	}
-	public boolean isPrimaryKey() {
-		return StringUtils.equals("Y", this.pk);
-	}
-	public void setPk(String pk) {
-		this.pk = pk;
-	}
-	public String getPk(){
-		return this.pk;
 	}
 	public String getDictId() {
 		return dictId;

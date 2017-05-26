@@ -23,13 +23,17 @@ import com.xjl.pt.form.mapper.TableMapper;
 public class TableService extends XJLService{
 	@Autowired
 	private TableMapper tableMapper;
+	@Autowired
+	private TableProcessor tableProcessor;
 	@Override
 	public void _add(XJLDomain domain) {
 		this.tableMapper.insert(domain);
+		this.tableProcessor.createTable(((Table)domain).getTableName());
 	}
 	@Override
 	public void _delete(XJLDomain domain) {
 		this.tableMapper.delete(domain);
+		this.tableProcessor.renameTable(((Table)domain).getTableName(), "_D_"+((Table)domain).getTableName());
 	}
 	@Override
 	public void modify(XJLDomain domain, User user) {

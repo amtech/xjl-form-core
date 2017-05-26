@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,24 +25,37 @@ import com.xjl.pt.form.mapper.TableFieldMapper;
  */
 @Service
 public class TableFieldService extends XJLService {
+	private static Log log = LogFactory.getLog(TableFieldService.class);
 	@Autowired
 	private TableFieldMapper tableFieldMapper;
 	@Autowired
 	private TableService tableService;
 	@Autowired
 	private DictService dictService;
+	@Autowired
+	private TableProcessor tableProcessor;
 	@Override
 	public void _add(XJLDomain domain) {
 		this.tableFieldMapper.insert(domain);
+		TableField field = (TableField)domain;
+		log.debug("tableName:" + field.getTableId$name());
+		log.debug("fieldName:" + field.getFieldName());
+		log.debug("fieldType:" + field.getFieldType());
+		log.debug("fieldLength:" + field.getFieldLength());
+		//tableProcessor.addField("test_table_manager", "fix_abc", "10", 10);
 	}
 
 	@Override
 	public void _delete(XJLDomain domain) {
 		this.tableFieldMapper.delete(domain);
+		TableField field = (TableField)domain;
+		this.tableProcessor.renameField(field.getTableId$name(), field.getFieldName(), "_D_"+ field.getFieldName());
 	}
 	@Override
 	public void modify(XJLDomain domain, User user) {
 		this.tableFieldMapper.update(domain);
+		TableField field = (TableField)domain;
+		this.tableProcessor.alterFieldType(field.getTableId$name(), field.getFieldName(), field.getFieldType(), field.getFieldLength());
 	}
 	@Override
 	public void _resetNewId(XJLDomain domain) {
@@ -70,6 +85,12 @@ public class TableFieldService extends XJLService {
 			break;
 		case "40":
 			field.setFieldType$name("字典");
+			break;
+		case "50":
+			field.setFieldType$name("外键");
+			break;
+		case "60":
+			field.setFieldType$name("主键");
 			break;
 		default:
 			field.setFieldType$name("未知");
