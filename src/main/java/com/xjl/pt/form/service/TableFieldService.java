@@ -36,13 +36,14 @@ public class TableFieldService extends XJLService {
 	private TableProcessor tableProcessor;
 	@Override
 	public void _add(XJLDomain domain) {
-		this.tableFieldMapper.insert(domain);
 		TableField field = (TableField)domain;
-		log.debug("tableName:" + field.getTableId$name());
-		log.debug("fieldName:" + field.getFieldName());
-		log.debug("fieldType:" + field.getFieldType());
-		log.debug("fieldLength:" + field.getFieldLength());
-		//tableProcessor.addField("test_table_manager", "fix_abc", "10", 10);
+		if (TableField.FIELD_TYPE_STRING.equals(field.getFieldType())){
+			if (field.getFieldLength() == null){
+				throw new RuntimeException(field.getFieldName() + " 字符串类型 长度不能为空");
+			}
+		}
+		this.tableFieldMapper.insert(domain);
+		tableProcessor.addField(field.getTableId$name(), field.getFieldName(), field.getFieldType(), field.getFieldLength());
 	}
 
 	@Override
@@ -74,26 +75,26 @@ public class TableFieldService extends XJLService {
 			return;
 		}
 		switch (field.getFieldType()){
-		case "10":
+		case TableField.FIELD_TYPE_STRING:
 			field.setFieldType$name("字符");
 			break;
-		case "20":
+		case TableField.FIELD_TYPE_NUMBER:
 			field.setFieldType$name("数字");
 			break;
-		case "30":
+		case TableField.FIELD_TYPE_DATE:
 			field.setFieldType$name("日期");
 			break;
-		case "40":
+		case TableField.FIELD_TYPE_DICT:
 			field.setFieldType$name("字典");
 			break;
-		case "50":
-			field.setFieldType$name("外键");
-			break;
-		case "60":
+		case TableField.FIELD_TYPE_PK:
 			field.setFieldType$name("主键");
 			break;
+		case TableField.FIELD_TYPE_FK:
+			field.setFieldType$name("外键");
+			break;
 		default:
-			field.setFieldType$name("未知");
+			field.setFieldType$name("未知"+field.getFieldType());
 		}
 	}
 	public void initTableId$name(TableField field){

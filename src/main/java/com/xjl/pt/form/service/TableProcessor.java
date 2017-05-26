@@ -64,7 +64,7 @@ public class TableProcessor {
 	 * @param fieldType 字段类型
 	 * @param length 字段长度
 	 */
-	public void addField(String tableName, String fieldName, String fieldType, int length) {
+	public void addField(String tableName, String fieldName, String fieldType, Integer length) {
 		System.out.println("add field " + fieldName + " into " + tableName);
 		log.debug("add field " + fieldName + " into " + tableName);
 		String sql = "ALTER TABLE " + tableName + " ADD COLUMN " + fieldName + " "
@@ -101,10 +101,13 @@ public class TableProcessor {
 		String sql = "ALTER TABLE " + tableName + " DROP COLUMN " + fieldName + " RESTRICT";
 		this.jdbcTemplate.execute(sql);
 	}
-	private String getFieldTypeName(String fieldType, int length) {
+	private String getFieldTypeName(String fieldType, Integer length) {
 		switch (fieldType) {
 		case TableField.FIELD_TYPE_STRING:
-			return "character varying(" + length + ")";
+			if (length == null){
+				throw new RuntimeException("字符串类型长度不能为空");
+			}
+			return "character varying(" + length.intValue() + ")";
 		case TableField.FIELD_TYPE_NUMBER:
 			return "integer";
 		case TableField.FIELD_TYPE_DATE:
