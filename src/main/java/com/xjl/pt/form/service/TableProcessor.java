@@ -88,7 +88,7 @@ public class TableProcessor {
 	 * @param fieldType 新的字段类型
 	 * @param length 新的字段长度
 	 */
-	public void alterFieldType(String tableName, String fieldName, String newFieldType, int newLength) {
+	public void alterFieldType(String tableName, String fieldName, String newFieldType, Integer newLength) {
 		String sql ="ALTER TABLE " + tableName + " ALTER COLUMN " + fieldName + " TYPE " + this.getFieldTypeName(newFieldType, newLength);
 		this.jdbcTemplate.execute(sql);
 	}

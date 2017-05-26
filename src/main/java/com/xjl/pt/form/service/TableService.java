@@ -37,7 +37,13 @@ public class TableService extends XJLService{
 	}
 	@Override
 	public void modify(XJLDomain domain, User user) {
+		Table table = (Table)domain;
+		Table dbTable = this.queryById(table.getTableId());
 		this.tableMapper.update(domain);
+		if (!StringUtils.equals(table.getTableName(), dbTable.getTableName())){
+			//如果表的名称被修改过则需要修改物理表
+			this.tableProcessor.renameTable(dbTable.getTableName(), table.getTableName());
+		}
 	}
 	@Override
 	public void _resetNewId(XJLDomain domain) {

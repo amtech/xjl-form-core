@@ -40,4 +40,10 @@ public interface TableFieldMapper {
 			+ "field_type=#{fieldType},field_length=#{fieldLength},dict_id=#{dictId},"
 			+ "foreign_table_id=#{foreignTableId} where field_id=#{fieldId}")
 	public void update(XJLDomain field);
+	@Select("select field_id as fieldId,field_name as fieldName,field_desc as fieldDesc"
+			+ ",field_type as fieldType,field_length as fieldLength"
+			+ ",dict_id as dictId, table_id as tableId,foreign_table_id foreignTableId"
+			+ ","+XJLMapper.FIX_SELECT_FIELD
+			+ " from " + TABLE_NAME + " where field_id=#{fieldId}")
+	public TableField selectById(String fieldId);
 }

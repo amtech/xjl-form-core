@@ -42,6 +42,7 @@ public class TableFieldService extends XJLService {
 				throw new RuntimeException(field.getFieldName() + " 字符串类型 长度不能为空");
 			}
 		}
+		this.resetField(field);
 		this.tableFieldMapper.insert(domain);
 		tableProcessor.addField(field.getTableId$name(), field.getFieldName(), field.getFieldType(), field.getFieldLength());
 	}
@@ -54,13 +55,37 @@ public class TableFieldService extends XJLService {
 	}
 	@Override
 	public void modify(XJLDomain domain, User user) {
-		this.tableFieldMapper.update(domain);
+		
 		TableField field = (TableField)domain;
-		this.tableProcessor.alterFieldType(field.getTableId$name(), field.getFieldName(), field.getFieldType(), field.getFieldLength());
+		if (TableField.FIELD_TYPE_STRING.equals(field.getFieldType())){
+			if (field.getFieldLength() == null){
+				throw new RuntimeException(field.getFieldName() + " 字符串类型 长度不能为空");
+			}
+		}
+		this.resetField(field);
+		TableField dbField = this.queryById(field.getFieldId());
+		this.tableFieldMapper.update(domain);
+		//如果新的名称和数据库中原有名称不一致，说明修改了字段名称，需要先修改数据库物理表中的字段名称
+		if (!dbField.getFieldName().equals(field.getFieldName())){
+			this.tableProcessor.renameField(field.getTableId$name(), dbField.getFieldName(), field.getFieldName());
+		}
+		if (dbField.getFieldType().equals(field.getFieldType())){
+			//如果字段类型一样，看是不是字符串，如果是字符串，比较一下长度是不是一样
+			if (TableField.FIELD_TYPE_STRING.equals(field.getFieldType()) && dbField.getFieldLength().intValue() != field.getFieldLength().intValue()){
+				//同样是字符串类型，但是长度发生了变化，需要修改物理表中的类型
+				this.tableProcessor.alterFieldType(field.getTableId$name(), field.getFieldName(), field.getFieldType(), field.getFieldLength());
+			}
+		} else {
+			//字段类型不一致，需要修改物理表
+			this.tableProcessor.alterFieldType(field.getTableId$name(), field.getFieldName(), field.getFieldType(), field.getFieldLength());
+		}
 	}
 	@Override
 	public void _resetNewId(XJLDomain domain) {
 		((TableField)domain).setFieldId(UUID.randomUUID().toString());
+	}
+	public TableField queryById(String fieldId){
+		return this.tableFieldMapper.selectById(fieldId);
 	}
 	public int queryCountByTableId(String tableId){
 		return this.tableFieldMapper.selectCountByTableId(tableId);
@@ -126,5 +151,41 @@ public class TableFieldService extends XJLService {
 			return;
 		}
 		field.setDictId$name(dict.getDictName());
+	}
+	/**
+	 * 重置里面的一些值，把不相关的值去掉和根据类型设置长度
+	 * @param field
+	 */
+	public void resetField(TableField field){
+		switch (field.getFieldType()) {
+		case TableField.FIELD_TYPE_STRING:
+			field.setDictId(null);
+			field.setForeignTableId(null);
+			break;
+		case TableField.FIELD_TYPE_NUMBER:
+			field.setDictId(null);
+			field.setForeignTableId(null);
+			field.setFieldLength(null);
+			break;
+		case TableField.FIELD_TYPE_DATE:
+			field.setDictId(null);
+			field.setForeignTableId(null);
+			field.setFieldLength(null);
+			break;
+		case TableField.FIELD_TYPE_DICT:
+			field.setForeignTableId(null);
+			field.setFieldLength(36);
+			break;
+		case TableField.FIELD_TYPE_FK:
+			field.setDictId(null);
+			field.setFieldLength(36);
+			break;
+		case TableField.FIELD_TYPE_PK:
+			field.setDictId(null);
+			field.setForeignTableId(null);
+			field.setFieldLength(36);
+		default:
+			throw new RuntimeException(field.getFieldName() + "有一个未知字段类型:" + field.getFieldType());
+		}
 	}
 }
