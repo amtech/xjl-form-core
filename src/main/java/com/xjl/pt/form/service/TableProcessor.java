@@ -23,13 +23,17 @@ public class TableProcessor {
 	private static Log log = LogFactory.getLog(TableProcessor.class);
 	@Autowired
 	JdbcTemplate jdbcTemplate;
-
+	//是不是需要真正执行到数据库中
+	private boolean executeFlag = true;
 	/**
 	 * 在数据库中创建表，也创建固定的七个字段
 	 * 
 	 * @param tableName
 	 */
 	public void createTable(String tableName) {
+		if (!this.executeFlag){
+			return;
+		}
 		log.debug("createTable:" + tableName);
 		String sql = "CREATE TABLE " + tableName + "(org character varying(36),master character varying(36),"
 				+ "create_user_id character varying(36),create_date timestamp without time zone,"
@@ -44,6 +48,9 @@ public class TableProcessor {
 	 * @param tableName
 	 */
 	public void dropTable(String tableName) {
+		if (!this.executeFlag){
+			return;
+		}
 		log.debug("drop table " + tableName);
 		String sql = "drop table " + tableName;
 		this.jdbcTemplate.execute(sql);
@@ -54,6 +61,9 @@ public class TableProcessor {
 	 * @param newTableName 新的名称
 	 */
 	public void renameTable(String oldTableName, String newTableName){
+		if (!this.executeFlag){
+			return;
+		}
 		String sql = "ALTER TABLE " + oldTableName + " RENAME TO " + newTableName;
 		this.jdbcTemplate.execute(sql);
 	}
@@ -65,7 +75,9 @@ public class TableProcessor {
 	 * @param length 字段长度
 	 */
 	public void addField(String tableName, String fieldName, String fieldType, Integer length) {
-		System.out.println("add field " + fieldName + " into " + tableName);
+		if (!this.executeFlag){
+			return;
+		}
 		log.debug("add field " + fieldName + " into " + tableName);
 		String sql = "ALTER TABLE " + tableName + " ADD COLUMN " + fieldName + " "
 				+ getFieldTypeName(fieldType, length);
@@ -78,6 +90,9 @@ public class TableProcessor {
 	 * @param newFieldName 新字段名称
 	 */
 	public void renameField(String tableName, String oldFieldName, String newFieldName){
+		if (!this.executeFlag){
+			return;
+		}
 		String sql = "ALTER TABLE " + tableName + " RENAME COLUMN " + oldFieldName + " TO " + newFieldName;
 		this.jdbcTemplate.execute(sql);
 	}
@@ -89,6 +104,9 @@ public class TableProcessor {
 	 * @param length 新的字段长度
 	 */
 	public void alterFieldType(String tableName, String fieldName, String newFieldType, Integer newLength) {
+		if (!this.executeFlag){
+			return;
+		}
 		String sql ="ALTER TABLE " + tableName + " ALTER COLUMN " + fieldName + " TYPE " + this.getFieldTypeName(newFieldType, newLength);
 		this.jdbcTemplate.execute(sql);
 	}
@@ -98,6 +116,9 @@ public class TableProcessor {
 	 * @param fieldName 字段名称
 	 */
 	public void dropField(String tableName, String fieldName){
+		if (!this.executeFlag){
+			return;
+		}
 		String sql = "ALTER TABLE " + tableName + " DROP COLUMN " + fieldName + " RESTRICT";
 		this.jdbcTemplate.execute(sql);
 	}
