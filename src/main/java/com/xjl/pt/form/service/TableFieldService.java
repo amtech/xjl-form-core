@@ -184,6 +184,7 @@ public class TableFieldService extends XJLService {
 			field.setDictId(null);
 			field.setForeignTableId(null);
 			field.setFieldLength(36);
+			break;
 		default:
 			throw new RuntimeException(field.getFieldName() + "有一个未知字段类型:" + field.getFieldType());
 		}
