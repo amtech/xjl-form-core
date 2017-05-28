@@ -38,7 +38,8 @@ public interface TableFieldMapper {
 	public void delete(XJLDomain field);
 	@Update("update " + TABLE_NAME + " set field_name=#{fieldName},field_desc=#{fieldDesc},"
 			+ "field_type=#{fieldType},field_length=#{fieldLength},dict_id=#{dictId},"
-			+ "foreign_table_id=#{foreignTableId} where field_id=#{fieldId}")
+			+ "foreign_table_id=#{foreignTableId},"+XJLMapper.FIX_UPDATE_FIELD
+			+ " where field_id=#{fieldId}")
 	public void update(XJLDomain field);
 	@Select("select field_id as fieldId,field_name as fieldName,field_desc as fieldDesc"
 			+ ",field_type as fieldType,field_length as fieldLength"

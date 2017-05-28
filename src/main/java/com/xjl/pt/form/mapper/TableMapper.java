@@ -31,7 +31,10 @@ public interface TableMapper {
 	public Table selectById(String tableId);
 	@Update("update " + TABLE_NAME + " set "+ XJLMapper.FIX_DELETE_FIELD + " where table_id=#{tableId}")
 	public void delete(XJLDomain table);
-	@Update("update " + TABLE_NAME + " set table_name = #{tableName},table_desc = #{tableDesc} where table_id=#{tableId}")
+	@Update("update " + TABLE_NAME + " set "
+			+ "table_name = #{tableName},table_desc = #{tableDesc}, "
+			+ XJLMapper.FIX_UPDATE_FIELD 
+			+" where table_id=#{tableId}")
 	public void update(XJLDomain table);
 
 }

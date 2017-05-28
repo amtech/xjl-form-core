@@ -54,7 +54,7 @@ public class TableFieldService extends XJLService {
 		this.tableProcessor.renameField(field.getTableId$name(), field.getFieldName(), "_D_"+ field.getFieldName());
 	}
 	@Override
-	public void modify(XJLDomain domain, User user) {
+	public void _modify(XJLDomain domain) {
 		
 		TableField field = (TableField)domain;
 		if (TableField.FIELD_TYPE_STRING.equals(field.getFieldType())){

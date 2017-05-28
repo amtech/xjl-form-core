@@ -36,7 +36,7 @@ public class TableService extends XJLService{
 		this.tableProcessor.renameTable(((Table)domain).getTableName(), "_D_"+((Table)domain).getTableName());
 	}
 	@Override
-	public void modify(XJLDomain domain, User user) {
+	public void _modify(XJLDomain domain) {
 		Table table = (Table)domain;
 		Table dbTable = this.queryById(table.getTableId());
 		this.tableMapper.update(domain);
